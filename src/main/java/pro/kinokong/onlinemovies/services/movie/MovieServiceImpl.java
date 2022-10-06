@@ -11,6 +11,7 @@ import pro.kinokong.onlinemovies.exceptions.ResourceFoundException;
 import pro.kinokong.onlinemovies.exceptions.ResourceNotFoundException;
 import pro.kinokong.onlinemovies.mappers.movie.MovieMapper;
 import pro.kinokong.onlinemovies.projections.movie.MovieProjection;
+import pro.kinokong.onlinemovies.projections.review.ReviewProjection;
 import pro.kinokong.onlinemovies.repositories.movie.*;
 import pro.kinokong.onlinemovies.services.base.AbstractService;
 import pro.kinokong.onlinemovies.validators.movie.MovieValidator;
@@ -18,6 +19,8 @@ import pro.kinokong.onlinemovies.validators.movie.MovieValidator;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.Map;
+
 @Service
 public class MovieServiceImpl extends AbstractService<MovieRepository, MovieMapper, MovieValidator> implements MovieService {
 
@@ -95,15 +98,22 @@ public class MovieServiceImpl extends AbstractService<MovieRepository, MovieMapp
     }
 
     @Override
-    public Page<MovieProjection> getAllPageable(MovieCriteria criteria) {
-        return repository.findAllMovie(criteria.getActorsForSearch(), criteria.getGenresForSearch(), criteria.getTypeForSearch(), criteria.getSearchFormatted(), criteria.getPageable(true));
+    public Page<MovieProjection> getAllPageable(MovieCriteria criteria, String userId) {
+        return repository.findAllMovie(criteria.getActorsForSearch(), criteria.getGenresForSearch(), criteria.getTypeForSearch(), criteria.getSearchFormatted(),userId,  criteria.getPageable(true));
     }
 
 
-    public List fromJsonToObject(String jsonObj) {
+    public List fromJsonToObjectList(String jsonObj) {
         if (jsonObj==null){
             return null;
         }
         return gson.fromJson(jsonObj, List.class);
+    }
+
+    public Map fromJsonToObject(String jsonObj) {
+        if(jsonObj==null){
+            return null;
+        }
+        return gson.fromJson(jsonObj, Map.class);
     }
 }

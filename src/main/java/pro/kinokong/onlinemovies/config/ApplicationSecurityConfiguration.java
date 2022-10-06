@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -39,12 +40,30 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     private final UserServiceImp service;
 
     public final static String[] WHITE_LIST = {
-        PATH+"/movie/**"
+            "/swagger-ui/**",
+            "/swagger/**",
+            "/ui/**",
+            "/docs/**",
+            PATH+"/login/**",
+            PATH+"/register/**"
+
+    };
+
+    public final static String[] WHITE_LIST_METHOD_GET = {
+            PATH + "/movie/**",
+            PATH + "/actors/**",
+            PATH + "/country/**",
+            PATH + "/qualities/**",
+            PATH + "/types/**",
+            PATH + "/genre/**",
+            PATH + "/file/**",
+            PATH + "/review/**"
+
     };
     private final ObjectMapper mapper;
     private final UserRepository repository;
 
-    public ApplicationSecurityConfiguration(UserServiceImp service, ObjectMapper mapper, UserRepository repository) {
+    public ApplicationSecurityConfiguration(@Lazy UserServiceImp service, ObjectMapper mapper, UserRepository repository) {
         this.service = service;
         this.mapper = mapper;
         this.repository = repository;
@@ -55,14 +74,13 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     JwtAuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
-    public PasswordEncoder getEncoder(){
+    public PasswordEncoder getEncoder() {
         return new BCryptPasswordEncoder();
     }
 
 
-
     @Bean
-    public AuthenticationProvider getProvider(){
+    public AuthenticationProvider getProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(service);
         provider.setPasswordEncoder(getEncoder());
@@ -86,7 +104,6 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     }
 
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -96,9 +113,10 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeRequests(expressionInterceptUrlRegistry -> expressionInterceptUrlRegistry
-                        .antMatchers(HttpMethod.GET, PATH+"/movie/**")
-                        .permitAll()
-                        .anyRequest().permitAll()
+                        .antMatchers(HttpMethod.GET, WHITE_LIST_METHOD_GET).permitAll()
+                        .antMatchers(WHITE_LIST).permitAll()
+                        .antMatchers(HttpMethod.POST, PATH + "/movie/**", PATH + "/actors/**", PATH + "/country/**", PATH + "/qualities/**", PATH + "/types/**", PATH + "/genre/**", PATH + "/file/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 );
         http.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
     }

@@ -30,15 +30,19 @@ public interface MovieProjection extends GenericProjection {
 
     Double getRating();
 
-    @Value(value = "#{@movieServiceImpl.fromJsonToObject(target.genres_list)}")
+    boolean getChooseDislike();
+
+    boolean getChooseLike();
+
+    @Value(value = "#{@movieServiceImpl.fromJsonToObjectList(target.genres_list)}")
     List getGenres();
 
-    @Value(value = "#{@movieServiceImpl.fromJsonToObject(target.actors_list)}")
+    @Value(value = "#{@movieServiceImpl.fromJsonToObjectList(target.actors_list)}")
     List getActors();
 
-    @Value(value = "#{@movieServiceImpl.fromJsonToObject(target.countries_list)}")
+    @Value(value = "#{@movieServiceImpl.fromJsonToObjectList(target.countries_list)}")
     List getCountries();
 
-    @Value(value = "#{@movieServiceImpl.fromJsonToObject(target.qualities_list)}")
+    @Value(value = "#{@movieServiceImpl.fromJsonToObjectList(target.qualities_list)}")
     List getQualities();
 }

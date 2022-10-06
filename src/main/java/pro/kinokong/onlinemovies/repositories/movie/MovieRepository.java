@@ -9,6 +9,8 @@ import pro.kinokong.onlinemovies.entities.movie.Movie;
 import pro.kinokong.onlinemovies.projections.movie.MovieProjection;
 import pro.kinokong.onlinemovies.repositories.base.AbstractRepository;
 
+import java.util.Optional;
+
 
 @RestResource(exported = false)
 @Repository
@@ -17,9 +19,9 @@ public interface MovieRepository extends AbstractRepository<Movie, String> {
     boolean existsByTitle(String movieTitle);
 
     @Query(nativeQuery = true, value = """
-            select d.* from get_movie(:search, :genres, :actors, :type) d
+            select d.* from get_movie(:search, :genres, :actors, :type, :userId) d
             """)
-    Page<MovieProjection> findAllMovie(String actors, String genres, String type, String search, Pageable pageable);
+    Page<MovieProjection> findAllMovie(String actors, String genres, String type, String search, String userId, Pageable pageable);
 
 
     @Query(nativeQuery = true, value = """
@@ -54,4 +56,7 @@ public interface MovieRepository extends AbstractRepository<Movie, String> {
             group by m.id
             """)
     MovieProjection findMovieById(String id);
+
+    @Query(value = "from movies m left join m.like left join m.dislike where m.id = :movieId")
+    Optional<Movie> findByMovieId(String movieId);
 }

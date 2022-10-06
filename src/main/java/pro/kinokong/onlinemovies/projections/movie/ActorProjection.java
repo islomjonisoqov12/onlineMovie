@@ -13,4 +13,6 @@ public interface ActorProjection extends BaseGenericDto {
 
     String getFullName();
 
+    String getAvatar();
+
 }

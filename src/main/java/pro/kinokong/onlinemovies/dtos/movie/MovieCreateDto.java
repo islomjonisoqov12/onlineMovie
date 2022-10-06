@@ -27,7 +27,6 @@ public class MovieCreateDto implements BaseGenericDto {
     private LocalDate releaseDate;
     @NotNull(message = "duration cannot be null")
     private Integer duration;
-    @NotBlank(message = "description cannot be blank") @NotEmpty(message = "description cannot be empty")
     private String description;
     @NotEmpty(message = "quantities cannot be empty")
     private List<String> qualityIds;
@@ -36,12 +35,33 @@ public class MovieCreateDto implements BaseGenericDto {
     @NotEmpty(message = "countries cannot be empty")
     private List<String> countryIds;
     private List<String> actorIds;
-    @NotBlank(message = "video link cannot be blank") @NotEmpty(message = "video link cannot be empty")
     private String videoLink;
-    @NotBlank(message = "thriller link cannot be blak") @NotEmpty(message = "thriller link cannot be empty")
     private String thriller;
+
+    @NotNull(message = "image cannot be null") @NotBlank(message = "image cannot be blank") @NotEmpty(message = "image cannot be empty")
+    private String image;
+
     @NotNull(message = "isThriller cannot be null")
     private Boolean isThriller;
 
+    public String getThriller() {
+        if(thriller==null){
+            return null;
+        }
+        return thriller.trim();
+    }
 
+    public String getVideoLink() {
+        if(videoLink==null){
+            return null;
+        }
+        return videoLink.trim();
+    }
+
+    public String getDescription() {
+        if(description==null){
+            return null;
+        }
+        return description.trim();
+    }
 }

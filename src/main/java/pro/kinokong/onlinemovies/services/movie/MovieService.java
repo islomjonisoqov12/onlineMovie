@@ -10,5 +10,5 @@ public interface MovieService extends GenericCrudService<MovieProjection, MovieC
 
     boolean existsMovieByTitle(String movieTitle);
 
-    Page<MovieProjection> getAllPageable(MovieCriteria criteria);
+    Page<MovieProjection> getAllPageable(MovieCriteria criteria, String userId);
 }

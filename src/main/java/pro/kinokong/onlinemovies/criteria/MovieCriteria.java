@@ -57,6 +57,7 @@ public class MovieCriteria extends GenericCriteria {
         }
     }
 
+    @Hidden
     public String getTypeForSearch() {
         return type!=null && !type.isEmpty() && !type.isBlank()? type: "%";
     }

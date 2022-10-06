@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class JWTProvider {
 
-    long expirationTime = 1000 * 3600;
+    long expirationTime = 1000 * 3600 * 24;
     String secretKey = "islomSecretkey";
 
     public String generateToken(String username) {

@@ -38,6 +38,9 @@ public class Movie extends Auditable {
     @Column(columnDefinition = "text")
     private String thriller;
 
+    @Column(columnDefinition = "text")
+    private String image;
+
 
     @Column(columnDefinition = "text")
     private String description;

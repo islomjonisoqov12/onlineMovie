@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -11,6 +12,7 @@ import pro.kinokong.onlinemovies.controllers.AbstractController;
 import pro.kinokong.onlinemovies.criteria.MovieCriteria;
 import pro.kinokong.onlinemovies.dtos.exception.ExceptionDto;
 import pro.kinokong.onlinemovies.dtos.movie.MovieCreateDto;
+import pro.kinokong.onlinemovies.entities.user.User;
 import pro.kinokong.onlinemovies.payload.ApiResponse;
 import pro.kinokong.onlinemovies.projections.movie.MovieProjection;
 import pro.kinokong.onlinemovies.services.movie.MovieService;
@@ -19,6 +21,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(AbstractController.PATH + "/movie")
@@ -41,8 +44,9 @@ public class MovieController extends AbstractController<MovieService> {
 
     @Operation(summary = "sortBy will be id, title, description, createdAt, releaseDate, d.like, dislike, rating ")
     @GetMapping
-    public Page<MovieProjection> getMovies(@Valid MovieCriteria criteria) {
-        return service.getAllPageable(criteria);
+    public Page<MovieProjection> getMovies(@Valid MovieCriteria criteria, Authentication authentication) {
+        String userId = authentication != null? ((User) authentication.getPrincipal()).getId(): "";
+        return service.getAllPageable(criteria,userId);
     }
 
     @GetMapping("/title")

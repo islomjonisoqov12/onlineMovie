@@ -1,6 +1,7 @@
 package pro.kinokong.onlinemovies.services.user;
 
 
+import org.springframework.security.core.userdetails.UserDetailsService;
 import pro.kinokong.onlinemovies.criteria.base.BaseGenericCriteria;
 import pro.kinokong.onlinemovies.dtos.user.UserCreateDto;
 import pro.kinokong.onlinemovies.dtos.user.UserDto;
@@ -13,6 +14,6 @@ public interface UserService extends GenericCrudService<
         UserUpdateDto,
         String,
         BaseGenericCriteria
-        > {
+        > , UserDetailsService {
 
 }
