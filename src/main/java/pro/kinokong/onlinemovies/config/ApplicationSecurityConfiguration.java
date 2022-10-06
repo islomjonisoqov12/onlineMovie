@@ -116,6 +116,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                         .antMatchers(HttpMethod.GET, WHITE_LIST_METHOD_GET).permitAll()
                         .antMatchers(WHITE_LIST).permitAll()
                         .antMatchers(HttpMethod.POST, PATH + "/movie/**", PATH + "/actors/**", PATH + "/country/**", PATH + "/qualities/**", PATH + "/types/**", PATH + "/genre/**", PATH + "/file/**").hasRole("ADMIN")
+                        .mvcMatchers("/").permitAll()
                         .anyRequest().authenticated()
                 );
         http.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
