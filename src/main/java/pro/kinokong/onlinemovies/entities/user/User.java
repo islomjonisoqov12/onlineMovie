@@ -10,10 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity(name = "users")
 @Getter
@@ -59,5 +56,18 @@ public class User extends Auditable implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return user.getId().equals(getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fullName, username, password, email, role);
     }
 }
