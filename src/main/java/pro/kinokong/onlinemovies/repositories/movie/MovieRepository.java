@@ -32,6 +32,10 @@ public interface MovieRepository extends AbstractRepository<Movie, String> {
                    m.created_at                                             as "createdAt",
                    count(d.movies_id)                                       as "dislike",
                    count(l.movies_id)                                       as "like",
+                   coalesce((select count(*) > 0 from likes where likes.like_id = :userId),
+                            false)                                                                   as chooseLike,
+                   coalesce((select count(*) > 0 from dislikes ds where ds.dislike_id = :userId),
+                            false)                                                                   as chooseDislike,
                    coalesce(m.rating_amount / m.rating_count, 0)            as "rating",
                    cast(coalesce((select jsonb_agg(g)
                                   from genres g
@@ -55,7 +59,7 @@ public interface MovieRepository extends AbstractRepository<Movie, String> {
             where m.id = :id
             group by m.id
             """)
-    MovieProjection findMovieById(String id);
+    MovieProjection findMovieById(String id, String userId);
 
     @Query(value = "from movies m left join m.like left join m.dislike where m.id = :movieId")
     Optional<Movie> findByMovieId(String movieId);

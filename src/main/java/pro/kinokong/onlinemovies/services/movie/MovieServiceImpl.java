@@ -11,7 +11,6 @@ import pro.kinokong.onlinemovies.exceptions.ResourceFoundException;
 import pro.kinokong.onlinemovies.exceptions.ResourceNotFoundException;
 import pro.kinokong.onlinemovies.mappers.movie.MovieMapper;
 import pro.kinokong.onlinemovies.projections.movie.MovieProjection;
-import pro.kinokong.onlinemovies.projections.review.ReviewProjection;
 import pro.kinokong.onlinemovies.repositories.movie.*;
 import pro.kinokong.onlinemovies.services.base.AbstractService;
 import pro.kinokong.onlinemovies.validators.movie.MovieValidator;
@@ -81,7 +80,7 @@ public class MovieServiceImpl extends AbstractService<MovieRepository, MovieMapp
 
     @Override
     public MovieProjection get(String id) {
-        return repository.findMovieById(id);
+        return null;
     }
 
     @Override
@@ -100,6 +99,11 @@ public class MovieServiceImpl extends AbstractService<MovieRepository, MovieMapp
     @Override
     public Page<MovieProjection> getAllPageable(MovieCriteria criteria, String userId) {
         return repository.findAllMovie(criteria.getActorsForSearch(), criteria.getGenresForSearch(), criteria.getTypeForSearch(), criteria.getSearchFormatted(),userId,  criteria.getPageable(true));
+    }
+
+    @Override
+    public MovieProjection get(String id, String userId) {
+        return repository.findMovieById(id, userId);
     }
 
 

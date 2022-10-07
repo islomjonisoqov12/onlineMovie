@@ -38,8 +38,9 @@ public class MovieController extends AbstractController<MovieService> {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<MovieProjection> getMovieById(@PathVariable String id) {
-        return ApiResponse.<MovieProjection>builder().content(service.get(id)).build();
+    public ApiResponse<MovieProjection> getMovieById(@PathVariable String id, Authentication authentication) {
+        String userId = authentication != null? ((User) authentication.getPrincipal()).getId(): "";
+        return ApiResponse.<MovieProjection>builder().content(service.get(id, userId)).build();
     }
 
     @Operation(summary = "sortBy will be id, title, description, createdAt, releaseDate, d.like, dislike, rating ")
