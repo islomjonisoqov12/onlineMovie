@@ -33,7 +33,7 @@ public class FileServiceImpl implements FileService {
     public String save(List<FileDto> dtos) {
 //        String fileName = UUID.randomUUID().toString();
         mkDir(path);
-        String fileName = "71d66afb-7bbc-4639-85ce-23cc7e7ca42e";
+        String fileName = UUID.randomUUID().toString();
         for (FileDto dto : dtos) {
             try {
                 String originalFilename = dto.getFile().getOriginalFilename();
