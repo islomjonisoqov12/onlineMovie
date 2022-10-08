@@ -60,18 +60,6 @@ public class MovieController extends AbstractController<MovieService> {
         }
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionDto> handleValidationExceptions(MethodArgumentNotValidException ex, WebRequest request) {
-        StringBuilder errors = new StringBuilder();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String errorMessage = error.getDefaultMessage();
-            errors.append(errorMessage).append("\n");
-        });
-        errors.delete(errors.length()-1, errors.length());
-        return new ResponseEntity<>(new ExceptionDto((request + "").substring(23, request.toString().indexOf(";client")), 400, errors.toString()), HttpStatus.BAD_REQUEST);
-    }
-
 
 
 }

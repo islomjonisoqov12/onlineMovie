@@ -21,5 +21,7 @@ public interface FileService extends BaseGenericService {
 
     String saveImage(MultipartFile file) throws IOException;
 
+    List<String> saveImages(MultipartFile[] files);
+
     ResponseEntity<ByteArrayResource> getFile(String id) throws IOException;
 }

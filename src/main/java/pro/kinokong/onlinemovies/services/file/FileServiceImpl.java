@@ -5,7 +5,6 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +14,7 @@ import reactor.core.publisher.Mono;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -65,6 +65,23 @@ public class FileServiceImpl implements FileService {
         File newFile = new File(imagePath+"/"+s+file.getOriginalFilename());
         file.transferTo(newFile.toPath());
         return s;
+    }
+
+    @Override
+    public List<String> saveImages(MultipartFile[] files) {
+        List<String> names = new ArrayList<>();
+        mkDir(imagePath);
+        for (MultipartFile file : files) {
+            String id = UUID.randomUUID().toString();
+            File newFile = new File(imagePath+"/"+id+file.getOriginalFilename());
+            try {
+                file.transferTo(newFile.toPath());
+                names.add(id);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return names;
     }
 
     @Override

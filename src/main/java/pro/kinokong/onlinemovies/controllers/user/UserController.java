@@ -36,7 +36,7 @@ public class UserController extends AbstractController<UserService> {
     }
 
     @PostMapping("/register")
-    public ApiResponse<String> register(@Valid @RequestBody UserCreateDto dto){
+    public ApiResponse<String> register(@Valid @RequestBody UserCreateDto dto) {
         return ApiResponse.<String>builder().content(service.create(dto)).build();
     }
 
