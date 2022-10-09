@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pro.kinokong.onlinemovies.dtos.file.FileDto;
+import pro.kinokong.onlinemovies.exceptions.BadRequestException;
 import reactor.core.publisher.Mono;
 
 import java.io.File;
@@ -38,7 +39,9 @@ public class FileServiceImpl implements FileService {
             try {
                 String originalFilename = dto.getFile().getOriginalFilename();
                 String filePath = path +"/"+ fileName + dto.getQualityId() + originalFilename;
-                dto.getFile().transferTo(new File(filePath));
+                File file = new File(filePath);
+                boolean newFile = file.createNewFile();
+                dto.getFile().transferTo(file.toPath());
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -93,6 +96,18 @@ public class FileServiceImpl implements FileService {
         File first = Arrays.stream(folder.listFiles()).filter(file -> file.getName().startsWith(id)).findFirst().orElseThrow(() -> new ResourceNotFoundException("file not found"));
         return ResponseEntity.ok()
                 .body(new ByteArrayResource(Files.readAllBytes(first.toPath())));
+    }
+
+    @Override
+    public String saveVideos(MultipartFile[] files, String[] qualityIds) {
+        if (files==null || qualityIds==null || files.length!=qualityIds.length || files.length<0) {
+            throw new BadRequestException("file kiritish shart va quality idlar ham");
+        }
+        List<FileDto> dto = new ArrayList<>();
+        for (int i = 0; i < files.length; i++) {
+            dto.add(new FileDto(qualityIds[i], files[i]));
+        }
+        return save(dto);
     }
 
 

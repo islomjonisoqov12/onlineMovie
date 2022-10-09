@@ -36,6 +36,11 @@ public class FileController extends AbstractController<FileService> {
         return service.save(dtos);
     }
 
+    @PostMapping("/videos")
+    public String uploadFile1(@RequestBody MultipartFile[] files , @RequestParam String qualityIds){
+        return service.saveVideos(files, qualityIds.split(","));
+    }
+
     @GetMapping(value = "video/{title}", produces = "video/mp4")
     public Mono<Resource> getVideos(@PathVariable String title, @RequestHeader("Range") String range) {
         System.out.println("range in bytes() : " + range);
